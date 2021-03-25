@@ -24,9 +24,9 @@ public:
     DateTime(DateTime&&) = delete;
     DateTime& operator=(DateTime&&) = delete;
 
-    std::string getCurrentDateTime();
-    std::string getCurrentTime();
-    std::string getCurrentDate();
+    std::string getCurrentDateTimeToString();
+    std::string getCurrentTimeToString();
+    std::string getCurrentDateToString();
 
 private:
     std::chrono::time_point<std::chrono::system_clock> now;

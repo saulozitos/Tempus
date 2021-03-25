@@ -24,7 +24,7 @@ DateTime::DateTime(const DateTime::DateFormat dt)
     }
 }
 
-std::string DateTime::getCurrentDateTime()
+std::string DateTime::getCurrentDateTimeToString()
 {
     loadValues();
 
@@ -41,7 +41,7 @@ std::string DateTime::getCurrentDateTime()
     return oss.str();
 }
 
-std::string DateTime::getCurrentTime()
+std::string DateTime::getCurrentTimeToString()
 {
     loadValues();
     std::ostringstream oss;
@@ -50,7 +50,7 @@ std::string DateTime::getCurrentTime()
     return oss.str();
 }
 
-std::string DateTime::getCurrentDate()
+std::string DateTime::getCurrentDateToString()
 {
     loadValues();
     std::array<char, sizeof (bt)>buffer{};
