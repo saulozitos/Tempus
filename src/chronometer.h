@@ -11,6 +11,7 @@ public:
 
     void start();
     void stop();
+    void restart();
     double elapsedMilliseconds();
     double elapsedSeconds();
     std::string elapsedTimeToString();

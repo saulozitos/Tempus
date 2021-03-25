@@ -63,6 +63,15 @@ void Chronometer::stop()
     }
 }
 
+void Chronometer::restart()
+{
+    if(m_isRunning)
+    {
+        stop();
+        start();
+    }
+}
+
 double Chronometer::elapsedMilliseconds()
 {
     return duration_cast<milliseconds>(getTimePointNow() - m_StartTime).count();
