@@ -1,7 +1,7 @@
 # Tempus
 
 > " _Tempus edax rerum_ "
-A Latin expression that meanstime: that devours all things.
+A Latin expression that means: time, that devours all things.
 
 \
 Tempus is a C++ application example to work with date time and chronometer.
