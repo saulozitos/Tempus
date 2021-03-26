@@ -63,7 +63,7 @@ void Chronometer::stop()
     }
 }
 
-void Chronometer::restart()
+void Chronometer::reset()
 {
     if(m_isRunning)
     {
