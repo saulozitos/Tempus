@@ -28,6 +28,8 @@ public:
     std::string getCurrentTimeToString();
     std::string getCurrentDateToString();
 
+    static bool isLeapYear(const unsigned int year);
+
 private:
     std::chrono::time_point<std::chrono::system_clock> now;
     std::chrono::duration<long, std::ratio<1,1000>> ms{};

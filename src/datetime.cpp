@@ -61,6 +61,11 @@ std::string DateTime::getCurrentDateToString()
     return buffer.data();
 }
 
+bool DateTime::isLeapYear(const unsigned int year)
+{
+    return (year % 4 == 0) && ((year % 100 != 0) || (year % 400 == 0));
+}
+
 void DateTime::loadValues()
 {
     // get current time
