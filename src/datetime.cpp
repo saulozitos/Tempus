@@ -66,6 +66,11 @@ bool DateTime::isLeapYear(const unsigned int year)
     return (year % 4 == 0) && ((year % 100 != 0) || (year % 400 == 0));
 }
 
+std::chrono::system_clock::time_point DateTime::addDays(std::chrono::system_clock::time_point date, const int value)
+{
+    return date + std::chrono::hours(value * 24);
+}
+
 void DateTime::loadValues()
 {
     // get current time

@@ -29,6 +29,7 @@ public:
     std::string getCurrentDateToString();
 
     static bool isLeapYear(const unsigned int year);
+    static std::chrono::system_clock::time_point addDays(std::chrono::system_clock::time_point date, const int value);
 
 private:
     std::chrono::time_point<std::chrono::system_clock> now;
