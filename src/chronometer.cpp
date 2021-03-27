@@ -40,16 +40,16 @@ std::string Chronometer::formateTime(std::chrono::nanoseconds ns)
     return os.str();
 }
 
-std::chrono::time_point<std::chrono::system_clock> Chronometer::getTimePointNow()
+std::chrono::time_point<std::chrono::steady_clock> Chronometer::getTimePointNow()
 {
-    return m_isRunning ? system_clock::now() : m_EndTime;
+    return m_isRunning ? steady_clock::now() : m_EndTime;
 }
 
 void Chronometer::start()
 {
     if(!m_isRunning)
     {
-        m_StartTime = system_clock::now();
+        m_StartTime = steady_clock::now();
         m_isRunning = true;
     }
 }
@@ -58,7 +58,7 @@ void Chronometer::stop()
 {
     if(m_isRunning)
     {
-        m_EndTime = system_clock::now();
+        m_EndTime = steady_clock::now();
         m_isRunning = false;
     }
 }

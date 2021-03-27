@@ -17,10 +17,10 @@ public:
     std::string elapsedTimeToString();
 
 private:
-    std::chrono::time_point<std::chrono::system_clock> m_StartTime{};
-    std::chrono::time_point<std::chrono::system_clock> m_EndTime{};
+    std::chrono::time_point<std::chrono::steady_clock> m_StartTime{};
+    std::chrono::time_point<std::chrono::steady_clock> m_EndTime{};
     bool m_isRunning = false;
     static std::string formateTime(std::chrono::nanoseconds ns);
-    std::chrono::time_point<std::chrono::system_clock> getTimePointNow();
+    std::chrono::time_point<std::chrono::steady_clock> getTimePointNow();
 };
 
