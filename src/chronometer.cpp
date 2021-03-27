@@ -20,15 +20,15 @@ std::string Chronometer::formateTime(std::chrono::nanoseconds ns)
 {
     using days = duration<int, std::ratio<Constants::oneDayInSeconds>>;
 
-    auto d = duration_cast<days>(ns);
+    const auto d = duration_cast<days>(ns);
     ns -= d;
-    auto h = duration_cast<hours>(ns);
+    const auto h = duration_cast<hours>(ns);
     ns -= h;
-    auto m = duration_cast<minutes>(ns);
+    const auto m = duration_cast<minutes>(ns);
     ns -= m;
-    auto s = duration_cast<seconds>(ns);
+    const auto s = duration_cast<seconds>(ns);
     ns -= s;
-    auto ms = duration_cast<milliseconds>(ns);
+    const auto ms = duration_cast<milliseconds>(ns);
 
     std::ostringstream os;
     os << std::setfill('0') << std::setw(2) << d.count() << "d:"
