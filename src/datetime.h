@@ -3,6 +3,12 @@
 #include <string>
 #include <chrono>
 
+class Date
+{
+public:
+private:
+};
+
 class DateTime
 {
 public:
@@ -32,10 +38,11 @@ public:
     static std::chrono::system_clock::time_point addDays(std::chrono::system_clock::time_point date, const int value);
 
 private:
-    std::chrono::time_point<std::chrono::system_clock> now;
-    std::chrono::duration<long, std::ratio<1,1000>> ms{};
-    std::tm bt{};
-    std::string dateFormat{};
+    std::chrono::time_point<std::chrono::system_clock> m_now;
+    std::chrono::duration<long, std::ratio<1,1000>> m_ms{};
+    std::tm m_bt{};
+    std::string m_dateFormat{};
     void loadValues();
+    static int64_t currentMSecsSinceEpoch();
 };
 
