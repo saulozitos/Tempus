@@ -2,40 +2,32 @@
 
 #include <sstream>
 #include <iomanip>
+#include "datetime.h"
 
 using namespace std::chrono;
 
 namespace Constants
 {
-    constexpr auto oneDayInSeconds{86400};
+    //constexpr auto oneDayInSeconds{86400};
     constexpr auto msToSec{1000.00};
 }
+
 
 Chronometer::Chronometer()
 {
     start();
 }
 
-std::string Chronometer::formateTime(std::chrono::nanoseconds ns)
+std::string Chronometer::formateTime(std::chrono::nanoseconds totalTime)
 {
-    using days = duration<int, std::ratio<Constants::oneDayInSeconds>>;
-
-    const auto d = duration_cast<days>(ns);
-    ns -= d;
-    const auto h = duration_cast<hours>(ns);
-    ns -= h;
-    const auto m = duration_cast<minutes>(ns);
-    ns -= m;
-    const auto s = duration_cast<seconds>(ns);
-    ns -= s;
-    const auto ms = duration_cast<milliseconds>(ns);
+    const auto dt = DateTime(totalTime);
 
     std::ostringstream os;
-    os << std::setfill('0') << std::setw(2) << d.count() << "d:"
-       << std::setfill('0') << std::setw(2) << h.count() << ":"
-       << std::setfill('0') << std::setw(2) << m.count() << ":"
-       << std::setfill('0') << std::setw(2) << s.count() << "."
-       << std::setfill('0') << std::setw(3) << ms.count();
+    os << std::setfill('0') << std::setw(2) << dt.day().count() << "d:"
+       << std::setfill('0') << std::setw(2) << dt.hour().count() << ":"
+       << std::setfill('0') << std::setw(2) << dt.minute().count() << ":"
+       << std::setfill('0') << std::setw(2) << dt.second().count() << "."
+       << std::setfill('0') << std::setw(3) << dt.mSecond().count();
 
     return os.str();
 }

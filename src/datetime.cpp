@@ -4,6 +4,12 @@
 #include <sstream>
 #include <iomanip>
 
+namespace Constants
+{
+constexpr auto oneDayInSeconds{86400};
+constexpr auto msToSec{1000.00};
+}
+
 DateTime::DateTime(const DateTime::DateFormat dt)
 {
     switch (dt) {
@@ -22,6 +28,22 @@ DateTime::DateTime(const DateTime::DateFormat dt)
     default:
         break;
     }
+}
+
+DateTime::DateTime(std::chrono::nanoseconds amountTime)
+{
+    using namespace std::chrono;
+    using days = duration<int, std::ratio<Constants::oneDayInSeconds>>;
+
+    m_day = duration_cast<days>(amountTime);
+    amountTime -= m_day;
+    m_hour = duration_cast<hours>(amountTime);
+    amountTime -= m_hour;
+    m_minute = duration_cast<minutes>(amountTime);
+    amountTime -= m_minute;
+    m_second = duration_cast<seconds>(amountTime);
+    amountTime -= m_second;
+    m_mSecond = duration_cast<milliseconds>(amountTime);
 }
 
 std::string DateTime::getCurrentDateTimeToString()
@@ -88,3 +110,29 @@ int64_t DateTime::currentMSecsSinceEpoch()
 {
     return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 }
+
+std::chrono::duration<int, std::ratio<86400, 1> > DateTime::day() const
+{
+    return m_day;
+}
+
+std::chrono::duration<long, std::ratio<3600, 1> > DateTime::hour() const
+{
+    return m_hour;
+}
+
+std::chrono::duration<long, std::ratio<60, 1> > DateTime::minute() const
+{
+    return m_minute;
+}
+
+std::chrono::duration<long, std::ratio<1, 1> > DateTime::second() const
+{
+    return m_second;
+}
+
+std::chrono::duration<long, std::ratio<1, 1000> > DateTime::mSecond() const
+{
+    return m_mSecond;
+}
+
