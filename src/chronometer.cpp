@@ -8,7 +8,6 @@ using namespace std::chrono;
 
 namespace Constants
 {
-    //constexpr auto oneDayInSeconds{86400};
     constexpr auto msToSec{1000.00};
 }
 
@@ -22,7 +21,7 @@ std::string Chronometer::formateTime(std::chrono::nanoseconds totalTime)
 {
     const auto dt = DateTime(totalTime);
 
-    std::ostringstream os;
+    std::stringstream os;
     os << std::setfill('0') << std::setw(2) << dt.day().count() << "d:"
        << std::setfill('0') << std::setw(2) << dt.hour().count() << ":"
        << std::setfill('0') << std::setw(2) << dt.minute().count() << ":"

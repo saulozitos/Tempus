@@ -21,8 +21,8 @@ public:
         DDMMYY,   //23-03-2021
     };
 
-    DateTime(const DateFormat dt = DateFormat::YYYYMMDD);
-    DateTime(std::chrono::nanoseconds amountTime);
+    explicit DateTime(const DateFormat dateFormat = DateFormat::YYYYMMDD);
+    explicit DateTime(const std::chrono::nanoseconds amountTime);
     ~DateTime() = default;
 
     DateTime(DateTime const&) = delete;
@@ -48,13 +48,16 @@ private:
     std::chrono::duration<long, std::ratio<1,1000>> m_ms{};
     std::tm m_bt{};
     std::string m_dateFormat{};
-    void loadValues();
-    static int64_t currentMSecsSinceEpoch();
-
     std::chrono::duration<int, std::ratio<86400, 1>>m_day{};
     std::chrono::duration<long, std::ratio<3600, 1>>m_hour{};
     std::chrono::duration<long, std::ratio<60, 1>>m_minute{};
     std::chrono::duration<long, std::ratio<1, 1>>m_second{};
     std::chrono::duration<long, std::ratio<1, 1000>>m_mSecond{};
+
+    void loadValues();
+    static int64_t currentMSecsSinceEpoch();
+    static std::string getDateFormat(const DateFormat dateFormat);
+    void loadDateTimeFromNanoseconds(std::chrono::nanoseconds nsTime);
+
 };
 

@@ -7,43 +7,16 @@
 namespace Constants
 {
 constexpr auto oneDayInSeconds{86400};
-constexpr auto msToSec{1000.00};
+constexpr auto msToSec{1000};
 }
 
-DateTime::DateTime(const DateTime::DateFormat dt)
-{
-    switch (dt) {
-    case DateFormat::YYYYMMDD:
-        m_dateFormat = "%Y-%m-%d";
-        break;
-    case DateFormat::DDMMYYYY:
-        m_dateFormat = "%d-%m-%Y";
-        break;
-    case DateFormat::YYMMDD:
-        m_dateFormat = "%y-%m-%d";
-        break;
-    case DateFormat::DDMMYY:
-        m_dateFormat = "%d-%m-%y";
-        break;
-    default:
-        break;
-    }
-}
+DateTime::DateTime(const DateTime::DateFormat dateFormat) :
+    m_dateFormat(getDateFormat(dateFormat))
+{}
 
-DateTime::DateTime(std::chrono::nanoseconds amountTime)
+DateTime::DateTime(const std::chrono::nanoseconds amountTime)
 {
-    using namespace std::chrono;
-    using days = duration<int, std::ratio<Constants::oneDayInSeconds>>;
-
-    m_day = duration_cast<days>(amountTime);
-    amountTime -= m_day;
-    m_hour = duration_cast<hours>(amountTime);
-    amountTime -= m_hour;
-    m_minute = duration_cast<minutes>(amountTime);
-    amountTime -= m_minute;
-    m_second = duration_cast<seconds>(amountTime);
-    amountTime -= m_second;
-    m_mSecond = duration_cast<milliseconds>(amountTime);
+    loadDateTimeFromNanoseconds(amountTime);
 }
 
 std::string DateTime::getCurrentDateTimeToString()
@@ -98,8 +71,8 @@ void DateTime::loadValues()
     // get current time
     m_now = std::chrono::system_clock::now();
     // get number of milliseconds for the current second (remainder after division into seconds)
-    constexpr auto msToSec{1000};
-    m_ms = std::chrono::duration_cast<std::chrono::milliseconds>(m_now.time_since_epoch()) % msToSec;
+
+    m_ms = std::chrono::duration_cast<std::chrono::milliseconds>(m_now.time_since_epoch()) % Constants::msToSec;
     // convert to std::time_t in order to convert to std::tm (broken time)
     const auto timer = std::chrono::system_clock::to_time_t(m_now);
     // convert to broken time
@@ -109,6 +82,36 @@ void DateTime::loadValues()
 int64_t DateTime::currentMSecsSinceEpoch()
 {
     return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+}
+
+std::string DateTime::getDateFormat(const DateTime::DateFormat dateFormat)
+{
+    switch (dateFormat) {
+    case DateFormat::YYYYMMDD:
+        return std::string("%Y-%m-%d");
+    case DateFormat::DDMMYYYY:
+        return std::string("%d-%m-%Y");
+    case DateFormat::YYMMDD:
+        return std::string("%y-%m-%d");
+    case DateFormat::DDMMYY:
+        return std::string("%d-%m-%y");
+    }
+}
+
+void DateTime::loadDateTimeFromNanoseconds(std::chrono::nanoseconds nsTime)
+{
+    using namespace std::chrono;
+    using days = duration<int, std::ratio<Constants::oneDayInSeconds>>;
+
+    m_day = duration_cast<days>(nsTime);
+    nsTime -= m_day;
+    m_hour = duration_cast<hours>(nsTime);
+    nsTime -= m_hour;
+    m_minute = duration_cast<minutes>(nsTime);
+    nsTime -= m_minute;
+    m_second = duration_cast<seconds>(nsTime);
+    nsTime -= m_second;
+    m_mSecond = duration_cast<milliseconds>(nsTime);
 }
 
 std::chrono::duration<int, std::ratio<86400, 1> > DateTime::day() const
