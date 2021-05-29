@@ -3,11 +3,32 @@
 #include <string>
 #include <chrono>
 
-class Date
-{
-public:
-private:
-};
+using namespace std::chrono;
+
+namespace Ratio {
+using hours = std::ratio<3600, 1>;
+using minutes = std::ratio<60, 1>;
+using seconds = std::ratio<1, 1>;
+using milliseconds = std::ratio<1, 1000>;
+using days = std::ratio<86400>;
+using weeks = std::ratio<604800>;
+using months = std::ratio<2629746>;
+using years = std::ratio<31556952>;
+}
+
+namespace Duration {
+using day = duration<int64_t, Ratio::days>;
+using hour = duration<int64_t, Ratio::hours>;
+using minute = duration<int64_t, Ratio::minutes>;
+using second = duration<int64_t, Ratio::seconds>;
+using millisecond = duration<int64_t, Ratio::milliseconds>;
+}
+
+using days = duration<int64_t, Ratio::days>;
+using weeks = duration<int64_t, Ratio::weeks>;
+using months = duration<int64_t, Ratio::months>;
+using years = duration<int64_t, Ratio::years>;
+
 
 class DateTime
 {
@@ -22,7 +43,7 @@ public:
     };
 
     explicit DateTime(const DateFormat dateFormat = DateFormat::YYYYMMDD);
-    explicit DateTime(const std::chrono::nanoseconds amountTime);
+    explicit DateTime(const nanoseconds amountTime);
     ~DateTime() = default;
 
     DateTime(DateTime const&) = delete;
@@ -35,29 +56,29 @@ public:
     std::string getCurrentDateToString();
 
     static bool isLeapYear(const unsigned int year);
-    static std::chrono::system_clock::time_point addDays(std::chrono::system_clock::time_point date, const int value);
+    static system_clock::time_point addDays(system_clock::time_point date, const int value);
 
-    std::chrono::duration<int, std::ratio<86400, 1> > day() const;
-    std::chrono::duration<long, std::ratio<3600, 1> > hour() const;
-    std::chrono::duration<long, std::ratio<60, 1> > minute() const;
-    std::chrono::duration<long, std::ratio<1, 1> > second() const;
-    std::chrono::duration<long, std::ratio<1, 1000> > mSecond() const;
+    Duration::day day() const;
+    Duration::hour hour() const;
+    Duration::minute minute() const;
+    Duration::second second() const;
+    Duration::millisecond millisecond() const;
 
 private:
-    std::chrono::time_point<std::chrono::system_clock> m_now;
-    std::chrono::duration<long, std::ratio<1,1000>> m_ms{};
+    std::chrono::time_point<system_clock> m_now;
+    Duration::millisecond m_ms{};
     std::tm m_bt{};
     std::string m_dateFormat{};
-    std::chrono::duration<int, std::ratio<86400, 1>>m_day{};
-    std::chrono::duration<long, std::ratio<3600, 1>>m_hour{};
-    std::chrono::duration<long, std::ratio<60, 1>>m_minute{};
-    std::chrono::duration<long, std::ratio<1, 1>>m_second{};
-    std::chrono::duration<long, std::ratio<1, 1000>>m_mSecond{};
+    Duration::day m_day{};
+    Duration::hour m_hour{};
+    Duration::minute m_minute{};
+    Duration::second m_second{};
+    Duration::millisecond m_millisecond{};
 
     void loadValues();
     static int64_t currentMSecsSinceEpoch();
     static std::string getDateFormat(const DateFormat dateFormat);
-    void loadDateTimeFromNanoseconds(std::chrono::nanoseconds nsTime);
+    void loadDateTimeFromNanoseconds(nanoseconds nsTime);
 
 };
 

@@ -26,7 +26,7 @@ std::string Chronometer::formateTime(std::chrono::nanoseconds totalTime)
        << std::setfill('0') << std::setw(2) << dt.hour().count() << ":"
        << std::setfill('0') << std::setw(2) << dt.minute().count() << ":"
        << std::setfill('0') << std::setw(2) << dt.second().count() << "."
-       << std::setfill('0') << std::setw(3) << dt.mSecond().count();
+       << std::setfill('0') << std::setw(3) << dt.millisecond().count();
 
     return os.str();
 }

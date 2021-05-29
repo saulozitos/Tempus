@@ -6,7 +6,6 @@
 
 namespace Constants
 {
-constexpr auto oneDayInSeconds{86400};
 constexpr auto msToSec{1000};
 }
 
@@ -14,7 +13,7 @@ DateTime::DateTime(const DateTime::DateFormat dateFormat) :
     m_dateFormat(getDateFormat(dateFormat))
 {}
 
-DateTime::DateTime(const std::chrono::nanoseconds amountTime)
+DateTime::DateTime(const nanoseconds amountTime)
 {
     loadDateTimeFromNanoseconds(amountTime);
 }
@@ -28,21 +27,21 @@ std::string DateTime::getCurrentDateTimeToString()
 
     std::strftime(buffer.data(), sizeof(buffer), "%Y-%m-%d ", &m_bt);
 
-    std::ostringstream oss;
-    oss << buffer.data();
-    oss << std::put_time(&m_bt, "%H:%M:%S"); // HH:MM:SS
-    oss << '.' << std::setfill('0') << std::setw(3) << m_ms.count();
+    std::stringstream ss;
+    ss << buffer.data();
+    ss << std::put_time(&m_bt, "%H:%M:%S"); // HH:MM:SS
+    ss << '.' << std::setfill('0') << std::setw(3) << m_ms.count();
 
-    return oss.str();
+    return ss.str();
 }
 
 std::string DateTime::getCurrentTimeToString()
 {
     loadValues();
-    std::ostringstream oss;
-    oss << std::put_time(&m_bt, "%H:%M:%S"); // HH:MM:SS
-    oss << '.' << std::setfill('0') << std::setw(3) << m_ms.count();
-    return oss.str();
+    std::stringstream ss;
+    ss << std::put_time(&m_bt, "%H:%M:%S"); // HH:MM:SS
+    ss << '.' << std::setfill('0') << std::setw(3) << m_ms.count();
+    return ss.str();
 }
 
 std::string DateTime::getCurrentDateToString()
@@ -61,27 +60,52 @@ bool DateTime::isLeapYear(const unsigned int year)
     return (year % 4 == 0) && ((year % 100 != 0) || (year % 400 == 0));
 }
 
-std::chrono::system_clock::time_point DateTime::addDays(std::chrono::system_clock::time_point date, const int value)
+system_clock::time_point DateTime::addDays(system_clock::time_point date, const int value)
 {
-    return date + std::chrono::hours(value * 24);
+    return date + hours(value * 24);
+}
+
+Duration::day DateTime::day() const
+{
+    return m_day;
+}
+
+Duration::hour DateTime::hour() const
+{
+    return m_hour;
+}
+
+Duration::minute DateTime::minute() const
+{
+    return m_minute;
+}
+
+Duration::second DateTime::second() const
+{
+    return m_second;
+}
+
+Duration::millisecond DateTime::millisecond() const
+{
+    return m_millisecond;
 }
 
 void DateTime::loadValues()
 {
     // get current time
-    m_now = std::chrono::system_clock::now();
+    m_now = system_clock::now();
     // get number of milliseconds for the current second (remainder after division into seconds)
 
-    m_ms = std::chrono::duration_cast<std::chrono::milliseconds>(m_now.time_since_epoch()) % Constants::msToSec;
+    m_ms = duration_cast<milliseconds>(m_now.time_since_epoch()) % Constants::msToSec;
     // convert to std::time_t in order to convert to std::tm (broken time)
-    const auto timer = std::chrono::system_clock::to_time_t(m_now);
+    const auto timer = system_clock::to_time_t(m_now);
     // convert to broken time
     m_bt = *std::localtime(&timer);
 }
 
 int64_t DateTime::currentMSecsSinceEpoch()
 {
-    return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+    return duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
 }
 
 std::string DateTime::getDateFormat(const DateTime::DateFormat dateFormat)
@@ -96,13 +120,11 @@ std::string DateTime::getDateFormat(const DateTime::DateFormat dateFormat)
     case DateFormat::DDMMYY:
         return std::string("%d-%m-%y");
     }
+    return {};
 }
 
-void DateTime::loadDateTimeFromNanoseconds(std::chrono::nanoseconds nsTime)
+void DateTime::loadDateTimeFromNanoseconds(nanoseconds nsTime)
 {
-    using namespace std::chrono;
-    using days = duration<int, std::ratio<Constants::oneDayInSeconds>>;
-
     m_day = duration_cast<days>(nsTime);
     nsTime -= m_day;
     m_hour = duration_cast<hours>(nsTime);
@@ -111,31 +133,6 @@ void DateTime::loadDateTimeFromNanoseconds(std::chrono::nanoseconds nsTime)
     nsTime -= m_minute;
     m_second = duration_cast<seconds>(nsTime);
     nsTime -= m_second;
-    m_mSecond = duration_cast<milliseconds>(nsTime);
-}
-
-std::chrono::duration<int, std::ratio<86400, 1> > DateTime::day() const
-{
-    return m_day;
-}
-
-std::chrono::duration<long, std::ratio<3600, 1> > DateTime::hour() const
-{
-    return m_hour;
-}
-
-std::chrono::duration<long, std::ratio<60, 1> > DateTime::minute() const
-{
-    return m_minute;
-}
-
-std::chrono::duration<long, std::ratio<1, 1> > DateTime::second() const
-{
-    return m_second;
-}
-
-std::chrono::duration<long, std::ratio<1, 1000> > DateTime::mSecond() const
-{
-    return m_mSecond;
+    m_millisecond = duration_cast<milliseconds>(nsTime);
 }
 
