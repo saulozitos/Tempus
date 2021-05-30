@@ -9,8 +9,7 @@ namespace Constants
 constexpr auto msToSec{1000};
 }
 
-DateTime::DateTime(const DateTime::DateFormat dateFormat) :
-    m_dateFormat(getDateFormat(dateFormat))
+DateTime::DateTime(const DateTime::DateFormat dateFormat) : m_dateFormat(dateFormat)
 {}
 
 DateTime::DateTime(const nanoseconds amountTime)
@@ -50,7 +49,7 @@ std::string DateTime::getCurrentDateToString()
     std::array<char, sizeof (m_bt)>buffer{};
     buffer.fill(0);
 
-    std::strftime(buffer.data(), sizeof(buffer), m_dateFormat.c_str(), &m_bt);
+    std::strftime(buffer.data(), sizeof(buffer), getDateFormatToString(m_dateFormat).c_str(), &m_bt);
 
     return buffer.data();
 }
@@ -90,15 +89,27 @@ Duration::millisecond DateTime::millisecond() const
     return m_millisecond;
 }
 
+DateTime::DateFormat DateTime::getDateFormat() const
+{
+    return m_dateFormat;
+}
+
+void DateTime::setDateFormat(DateTime::DateFormat dateFormat)
+{
+    m_dateFormat = dateFormat;
+}
+
 void DateTime::loadValues()
 {
     // get current time
     m_now = system_clock::now();
-    // get number of milliseconds for the current second (remainder after division into seconds)
 
+    // get number of milliseconds for the current second (remainder after division into seconds)
     m_ms = duration_cast<milliseconds>(m_now.time_since_epoch()) % Constants::msToSec;
+
     // convert to std::time_t in order to convert to std::tm (broken time)
     const auto timer = system_clock::to_time_t(m_now);
+
     // convert to broken time
     m_bt = *std::localtime(&timer);
 }
@@ -108,7 +119,7 @@ int64_t DateTime::currentMSecsSinceEpoch()
     return duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
 }
 
-std::string DateTime::getDateFormat(const DateTime::DateFormat dateFormat)
+std::string DateTime::getDateFormatToString(DateTime::DateFormat dateFormat)
 {
     switch (dateFormat) {
     case DateFormat::YYYYMMDD:

@@ -64,11 +64,14 @@ public:
     Duration::second second() const;
     Duration::millisecond millisecond() const;
 
+    DateFormat getDateFormat() const;
+    void setDateFormat(DateTime::DateFormat dateFormat);
+
 private:
     std::chrono::time_point<system_clock> m_now;
     Duration::millisecond m_ms{};
     std::tm m_bt{};
-    std::string m_dateFormat{};
+    DateFormat m_dateFormat{};
     Duration::day m_day{};
     Duration::hour m_hour{};
     Duration::minute m_minute{};
@@ -77,7 +80,7 @@ private:
 
     void loadValues();
     static int64_t currentMSecsSinceEpoch();
-    static std::string getDateFormat(const DateFormat dateFormat);
+    static std::string getDateFormatToString(DateTime::DateFormat dateFormat);
     void loadDateTimeFromNanoseconds(nanoseconds nsTime);
 
 };
