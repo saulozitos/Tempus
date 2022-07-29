@@ -10,9 +10,10 @@ constexpr auto msToSec{1000};
 }
 
 DateTime::DateTime(const DateTime::DateFormat dateFormat) : m_dateFormat(dateFormat)
+    , m_isLeapYear(false)
 {}
 
-DateTime::DateTime(const nanoseconds amountTime)
+DateTime::DateTime(const nanoseconds amountTime) : m_isLeapYear(false)
 {
     loadDateTimeFromNanoseconds(amountTime);
 }
@@ -33,13 +34,23 @@ std::string DateTime::getCurrentDateTimeToString()
 
     return ss.str();
 }
-
+#include <iostream>
 std::string DateTime::getCurrentTimeToString()
 {
     loadValues();
     std::stringstream ss;
     ss << std::put_time(&m_bt, "%H:%M:%S"); // HH:MM:SS
     ss << '.' << std::setfill('0') << std::setw(3) << m_ms.count();
+
+    auto hora = m_bt.tm_hour;
+    auto min = m_bt.tm_min;
+    auto sec = m_bt.tm_sec;
+    auto dia = m_bt.tm_mday;
+    auto mes = m_bt.tm_mon;
+    auto ano = m_bt.tm_year;
+    std::cout << "teste: " << hora << ":" << min << ":" << sec << " - "
+              << dia << "/" << mes+1 << "/" << ano+1900 << '\n';
+
     return ss.str();
 }
 

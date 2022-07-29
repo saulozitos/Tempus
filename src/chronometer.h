@@ -21,7 +21,7 @@ private:
     std::chrono::time_point<std::chrono::steady_clock> m_EndTime{};
     bool m_isRunning = false;
     static std::string formateTime(std::chrono::nanoseconds totalTime);
-    std::chrono::time_point<std::chrono::steady_clock> getTimePointNow();
+    std::chrono::time_point<std::chrono::steady_clock> currentTimePoint();
 };
 
 

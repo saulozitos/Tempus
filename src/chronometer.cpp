@@ -31,7 +31,7 @@ std::string Chronometer::formateTime(std::chrono::nanoseconds totalTime)
     return os.str();
 }
 
-std::chrono::time_point<std::chrono::steady_clock> Chronometer::getTimePointNow()
+std::chrono::time_point<std::chrono::steady_clock> Chronometer::currentTimePoint()
 {
     return m_isRunning ? steady_clock::now() : m_EndTime;
 }
@@ -65,7 +65,7 @@ void Chronometer::reset()
 
 double Chronometer::elapsedMilliseconds()
 {
-    return duration_cast<milliseconds>(getTimePointNow() - m_StartTime).count();
+    return duration_cast<milliseconds>(currentTimePoint() - m_StartTime).count();
 }
 
 double Chronometer::elapsedSeconds()
@@ -75,5 +75,5 @@ double Chronometer::elapsedSeconds()
 
 std::string Chronometer::elapsedTimeToString()
 {
-    return formateTime(duration_cast<nanoseconds>(getTimePointNow() - m_StartTime));
+    return formateTime(duration_cast<nanoseconds>(currentTimePoint() - m_StartTime));
 }
